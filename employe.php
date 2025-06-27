@@ -8,6 +8,7 @@ if (!isset($_GET['emp_no'])) {
 
 $emp_no = $_GET['emp_no'];
 $emp = get_employee_details($emp_no);
+
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +22,9 @@ $emp = get_employee_details($emp_no);
 <body>
 
 <a href="index.php" class="btn">← Retour</a>
+<a href="historique.php?emp_no=<?php echo $emp['emp_no']; ?>" class="btn btn-primary mt-3">
+    Voir l’historique des salaires et des postes
+</a>
 
 <h1>Fiche Employé</h1>
 

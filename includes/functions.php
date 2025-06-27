@@ -72,3 +72,55 @@ function get_employee_details($emp_no) {
     mysqli_close($conn);
     return $row;
 }
+
+function get_salaries_by_employee($emp_no) {
+    $conn = connect_db();
+
+    $emp_no = mysqli_real_escape_string($conn, $emp_no);
+
+    $sql = "
+        SELECT salary, from_date, to_date
+        FROM salaries
+        WHERE emp_no = '$emp_no'
+        ORDER BY from_date DESC
+    ";
+
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        die("Erreur SQL (salaires) : " . mysqli_error($conn));
+    }
+
+    $data = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+
+    mysqli_close($conn);
+    return $data;
+}
+
+function get_titles_by_employee($emp_no) {
+    $conn = connect_db();
+
+    $emp_no = mysqli_real_escape_string($conn, $emp_no);
+
+    $sql = "
+        SELECT title, from_date, to_date
+        FROM titles
+        WHERE emp_no = '$emp_no'
+        ORDER BY from_date DESC
+    ";
+
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        die("Erreur SQL (titres) : " . mysqli_error($conn));
+    }
+
+    $data = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+
+    mysqli_close($conn);
+    return $data;
+}
