@@ -44,9 +44,7 @@ $departments = get_departments_with_managers();
 </table>
 
 </body>
-<a href="historique.php?emp_no=<?php echo $emp['emp_no']; ?>" class="btn btn-primary mt-3">
-    Voir l’historique des salaires et des postes
-</a>
+
 <a href="employe.php" class="btn">← Voir les employees</a>
 
 </html>
