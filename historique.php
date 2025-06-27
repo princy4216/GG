@@ -20,6 +20,7 @@ $titles = get_titles_by_employee($emp_no);
 <body>
 
 <a href="employe.php?emp_no=<?php echo $emp_no; ?>" class="btn">← Retour à la fiche</a>
+<a href="index.php" class="btn">← Retour</a>
 
 <div class="salaire-container">
     <h2>Historique des Salaires</h2>
