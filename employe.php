@@ -9,6 +9,7 @@ if (!isset($_GET['emp_no'])) {
 $emp_no = $_GET['emp_no'];
 $emp = get_employee_details($emp_no);
 
+
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +28,8 @@ $emp = get_employee_details($emp_no);
 </a>
 
 <h1>Fiche Employé</h1>
+
+<h2>Employé : <?php echo $emp['first_name'] . ' ' . $emp['last_name']; ?> (<?php echo $emp['emp_no']; ?>)</h2>
 
 <table>
     <tr><th>Numéro</th><td><?php echo $emp['emp_no']; ?></td></tr>
