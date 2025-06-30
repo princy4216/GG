@@ -137,50 +137,38 @@ function get_all_departments() {
 }
 
 function search_employees($dept_no, $nom, $age_min, $age_max) {
+    
+    
     $conn = connect_db();
 
-    $where = [];
+    if ($age_min == '') $age_min = 0;
+    if ($age_max == '') $age_max = 150;
 
-    if (!empty($dept_no)) {
-        $dept_no = mysqli_real_escape_string($conn, $dept_no);
-        $where[] = "de.dept_no = '$dept_no'";
+   
+    $sql = "SELECT e.emp_no, e.first_name, e.last_name,
+                   TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age
+            FROM employees e
+            JOIN dept_emp de ON e.emp_no = de.emp_no
+            WHERE de.to_date > NOW()";
+
+   
+    if ($dept_no != '') {
+        $sql .= " AND de.dept_no = '$dept_no'";
     }
 
-    if (!empty($nom)) {
-        $nom = mysqli_real_escape_string($conn, $nom);
-        $where[] = "(e.first_name LIKE '%$nom%' OR e.last_name LIKE '%$nom%')";
+   
+    if ($nom != '') {
+        $sql .= " AND e.last_name LIKE '%$nom%'";
     }
 
-    // Calculer l'âge directement dans SQL
-    $age_calcul = "TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE())";
+    $sql .= " AND TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) BETWEEN $age_min AND $age_max";
 
-    if (is_numeric($age_min)) {
-        $where[] = "$age_calcul >= $age_min";
-    }
-
-    if (is_numeric($age_max)) {
-        $where[] = "$age_calcul <= $age_max";
-    }
-
-    $where_sql = count($where) > 0 ? "WHERE " . implode(" AND ", $where) : "";
-
-    $sql = "
-        SELECT DISTINCT e.emp_no, e.first_name, e.last_name,
-               $age_calcul AS age
-        FROM employees e
-        JOIN dept_emp de ON e.emp_no = de.emp_no
-        $where_sql
-        ORDER BY e.last_name, e.first_name
-        LIMIT 100
-    ";
-
+    
+    $sql .= " ORDER BY e.emp_no";
 
     $result = mysqli_query($conn, $sql);
-    if (!$result) {
-        die("Erreur SQL: " . mysqli_error($conn));
-    }
-
     $data = [];
+
     while ($row = mysqli_fetch_assoc($result)) {
         $data[] = $row;
     }
@@ -188,4 +176,3 @@ function search_employees($dept_no, $nom, $age_min, $age_max) {
     mysqli_close($conn);
     return $data;
 }
-

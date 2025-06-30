@@ -1,112 +1,103 @@
 <?php
 require 'includes/functions.php';
 
+
 $departments = get_all_departments();
+
+
+$dept_no = '';
+$nom = '';
+$age_min = '';
+$age_max = '';
+
 $results = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && (
-    isset($_GET['nom']) || isset($_GET['dept_no']) || isset($_GET['age_min']) || isset($_GET['age_max'])
-)) {
-    $dept_no = $_GET['dept_no'] ?? '';
-    $nom = $_GET['nom'] ?? '';
-    $age_min = $_GET['age_min'] ?? '';
-    $age_max = $_GET['age_max'] ?? '';
+// On vérifie si la méthode est GET et qu’au moins un paramètre est présent
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['dept_no'])) {
+        $dept_no = $_GET['dept_no'];
+    }
+    if (isset($_GET['nom'])) {
+        $nom = $_GET['nom'];
+    }
+    if (isset($_GET['age_min'])) {
+        $age_min = $_GET['age_min'];
+    }
+    if (isset($_GET['age_max'])) {
+        $age_max = $_GET['age_max'];
+    }
 
-    $results = search_employees($dept_no, $nom, $age_min, $age_max);
+    // On lance la recherche seulement si au moins un filtre est rempli
+    if ($dept_no != '' || $nom != '' || $age_min != '' || $age_max != '') {
+        $results = search_employees($dept_no, $nom, $age_min, $age_max);
+    }
 }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Recherche d'Employés</title>
+    <title>Recherche d'employés</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
+    <a href="index.php" class="btn btn-link mt-3">← Retour à la liste des départements</a>
 </head>
-<body class="bg-light">
+<body class="p-4">
 
-<div class="container py-5">
+<h1>Recherche d'employés</h1>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="text-primary">🔍 Recherche d'employés</h1>
-        
-        <a href="index.php" class="btn btn-secondary">← Retour aux départements</a>
-    </div>
+<form method="GET" class="mb-4">
+    <label>Département :</label>
+    <select name="dept_no" class="form-select mb-3">
+        <option value="">-- Tous --</option>
+        <?php
+     
+        foreach ($departments as $d) {
+            $selected = '';
+            if ($dept_no == $d['dept_no']) {
+                $selected = 'selected';
+            }
+            echo '<option value="' . $d['dept_no'] . '" ' . $selected . '>' . $d['dept_name'] . '</option>';
+        }
+        ?>
+    </select>
 
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <form method="GET">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Département :</label>
-                        <select name="dept_no" class="form-select">
-                            <option value="">-- Tous --</option>
-                            <?php foreach ($departments as $d) { ?>
-                                <option value="<?php echo $d['dept_no']; ?>" <?php if (!empty($_GET['dept_no']) && $_GET['dept_no'] == $d['dept_no']) echo 'selected'; ?>>
-                                    <?php echo $d['dept_name']; ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Nom :</label>
-                        <input type="text" name="nom" class="form-control" value="<?php echo $_GET['nom'] ?? ''; ?>">
-                    </div>
-                </div>
+    <label>Nom :</label>
+    <input type="text" name="nom" class="form-control mb-3" value="<?php echo htmlspecialchars($nom); ?>">
 
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Âge minimum :</label>
-                        <input type="number" name="age_min" class="form-control" value="<?php echo $_GET['age_min'] ?? ''; ?>">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Âge maximum :</label>
-                        <input type="number" name="age_max" class="form-control" value="<?php echo $_GET['age_max'] ?? ''; ?>">
-                    </div>
-                </div>
+    <label>Âge minimum :</label>
+    <input type="number" name="age_min" class="form-control mb-3" value="<?php echo htmlspecialchars($age_min); ?>">
 
-                <button type="submit" class="btn btn-primary">Rechercher</button>
-            </form>
-        </div>
-    </div>
+    <label>Âge maximum :</label>
+    <input type="number" name="age_max" class="form-control mb-3" value="<?php echo htmlspecialchars($age_max); ?>">
 
-    <?php if (!empty($results)) { ?>
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h4>Résultats :</h4>
-                <table class="table table-striped table-bordered align-middle mt-3">
-                    <thead class="table-primary">
-                        <tr>
-                            <th>Numéro</th>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Âge</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($results as $e) { ?>
-                            <tr>
-                                <td><?php echo $e['emp_no']; ?></td>
-                                <td><?php echo $e['last_name']; ?></td>
-                                <td><?php echo $e['first_name']; ?></td>
-                                <td><?php echo $e['age']; ?> ans</td>
-                                <td>
-                                    <a href="employe.php?emp_no=<?php echo $e['emp_no']; ?>" class="btn btn-sm btn-info">
-                                        Voir
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    <?php } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) { ?>
-        <div class="alert alert-warning mt-4">Aucun résultat trouvé.</div>
-    <?php } ?>
+    <button type="submit" class="btn btn-primary">Rechercher</button>
+    <a href="recherche.php" class="btn btn-secondary ms-2">Réinitialiser</a>
+</form>
 
-</div>
+<?php
+if (!empty($results)) {
+    echo '<h2>Résultats :</h2>';
+    echo '<table class="table table-striped">';
+    echo '<thead><tr><th>Numéro</th><th>Nom</th><th>Prénom</th><th>Âge</th><th>Action</th></tr></thead><tbody>';
+    foreach ($results as $e) {
+        echo '<tr>';
+        echo '<td>' . $e['emp_no'] . '</td>';
+        echo '<td>' . $e['last_name'] . '</td>';
+        echo '<td>' . $e['first_name'] . '</td>';
+        echo '<td>' . $e['age'] . ' ans</td>';
+        echo '<td><a href="employe.php?emp_no=' . $e['emp_no'] . '" class="btn btn-sm btn-info">Voir</a></td>';
+        echo '</tr>';
+    }
+    echo '</tbody></table>';
+} else {
+   
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($dept_no != '' || $nom != '' || $age_min != '' || $age_max != '')) {
+        echo '<p>Aucun résultat trouvé.</p>';
+    }
+}
+?>
+
+
 
 </body>
 </html>
