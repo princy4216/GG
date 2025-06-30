@@ -49,3 +49,14 @@ a:hover {
     border-radius: 4px;
     margin-bottom: 20px;
 }
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.card-title {
+    color: #333;
+}
+
+.table th {
+    width: 30%;
+}
