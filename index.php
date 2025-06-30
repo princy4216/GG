@@ -9,7 +9,6 @@ $departments = get_departments_with_managers();
 <head>
     <title>Liste des Départements</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
 </head>
 <body class="bg-light p-4">
 
@@ -32,7 +31,7 @@ $departments = get_departments_with_managers();
                     <?php foreach ($departments as $dept) { ?>
                         <tr>
                             <td>
-                                <a href="departement.php?dept_no=<?php echo $dept['dept_no']; ?>" class="text-decoration-none">
+                                <a href="departement.php?dept_no=<?php echo $dept['dept_no']; ?>">
                                     <?php echo $dept['dept_name']; ?>
                                 </a>
                             </td>

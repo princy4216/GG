@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="text-primary">🔍 Recherche d'employés</h1>
+        
         <a href="index.php" class="btn btn-secondary">← Retour aux départements</a>
     </div>
 
