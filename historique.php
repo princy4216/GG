@@ -15,7 +15,7 @@ if (!$emp) {
 }
 
 $salaries = get_salaries_by_employee($emp_no);
-$titles = get_titles_by_employee($emp_no);
+$departments_history = get_department_history_by_employee($emp_no); // nouvelle fonction à inclure
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +32,7 @@ $titles = get_titles_by_employee($emp_no);
 <h1>Historique de l'Employé</h1>
 <h2>Employé : <?php echo $emp['first_name'] . ' ' . $emp['last_name']; ?> (<?php echo $emp['emp_no']; ?>)</h2>
 
+<!-- Historique des Salaires -->
 <div class="salaire-container">
     <h2>Historique des Salaires</h2>
     <table class="salaire-table">
@@ -50,20 +51,21 @@ $titles = get_titles_by_employee($emp_no);
     </table>
 </div>
 
+<!-- Historique des Départements -->
 <div class="titre-container">
-    <h2>Historique des Postes</h2>
+    <h2>Historique des Départements</h2>
     <table class="titre-table">
-        <tr><th>Titre</th><th>De</th><th>À</th></tr>
-        <?php if (!empty($titles)) : ?>
-            <?php foreach ($titles as $t) : ?>
+        <tr><th>Département</th><th>De</th><th>À</th></tr>
+        <?php if (!empty($departments_history)) : ?>
+            <?php foreach ($departments_history as $dept) : ?>
                 <tr>
-                    <td><?php echo $t['title']; ?></td>
-                    <td><?php echo $t['from_date']; ?></td>
-                    <td><?php echo $t['to_date']; ?></td>
+                    <td><?php echo $dept['dept_name']; ?></td>
+                    <td><?php echo $dept['from_date']; ?></td>
+                    <td><?php echo $dept['to_date']; ?></td>
                 </tr>
             <?php endforeach; ?>
         <?php else : ?>
-            <tr><td colspan="3">Aucun titre trouvé.</td></tr>
+            <tr><td colspan="3">Aucun historique de département trouvé.</td></tr>
         <?php endif; ?>
     </table>
 </div>

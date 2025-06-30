@@ -1,2 +1,23 @@
-Projet
-qsdhqjss
+Page index.php
+ Afficher tous les départements
+ Ajouter nom du manager actuel
+ Mettre un lien sur chaque département vers departement
+
+Page departement.php
+ Afficher les employés du département sélectionné
+Mettre un lien vers employe.php
+
+Page employe.php
+ Afficher la fiche de l’employé (nom, prénom, embauche, etc.)
+ Bouton vers historique.php
+
+Page historique.php
+ Afficher les salaires (salaire, date début/fin)
+ Afficher les titres (titre, date début/fin)
+
+Structure de fichiers
+index.php, departement.php, employe.php, historique.php
+ includes/functions.php (fonctions MySQL simples)
+ style.css
+ db_connect.php
+ 

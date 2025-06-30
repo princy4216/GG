@@ -45,6 +45,6 @@ $departments = get_departments_with_managers();
 
 </body>
 
-<a href="employe.php" class="btn">← Voir les employees</a>
+
 
 </html>
