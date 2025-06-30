@@ -42,6 +42,7 @@ $departments = get_departments_with_managers();
         <?php } ?>
     </tbody>
 </table>
+<a href="recherche.php" class="btn btn-success">🔍 Rechercher un employé</a>
 
 </body>
 

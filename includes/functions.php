@@ -124,4 +124,68 @@ function get_department_history_by_employee($emp_no) {
     mysqli_close($conn);
     return $data;
 }
+function get_all_departments() {
+    $conn = connect_db();
+    $sql = "SELECT dept_no, dept_name FROM departments ORDER BY dept_name";
+    $result = mysqli_query($conn, $sql);
+    $data = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+    mysqli_close($conn);
+    return $data;
+}
+
+function search_employees($dept_no, $nom, $age_min, $age_max) {
+    $conn = connect_db();
+
+    $where = [];
+
+    if (!empty($dept_no)) {
+        $dept_no = mysqli_real_escape_string($conn, $dept_no);
+        $where[] = "de.dept_no = '$dept_no'";
+    }
+
+    if (!empty($nom)) {
+        $nom = mysqli_real_escape_string($conn, $nom);
+        $where[] = "(e.first_name LIKE '%$nom%' OR e.last_name LIKE '%$nom%')";
+    }
+
+    // Calculer l'âge directement dans SQL
+    $age_calcul = "TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE())";
+
+    if (is_numeric($age_min)) {
+        $where[] = "$age_calcul >= $age_min";
+    }
+
+    if (is_numeric($age_max)) {
+        $where[] = "$age_calcul <= $age_max";
+    }
+
+    $where_sql = count($where) > 0 ? "WHERE " . implode(" AND ", $where) : "";
+
+    $sql = "
+        SELECT DISTINCT e.emp_no, e.first_name, e.last_name,
+               $age_calcul AS age
+        FROM employees e
+        JOIN dept_emp de ON e.emp_no = de.emp_no
+        $where_sql
+        ORDER BY e.last_name, e.first_name
+        LIMIT 100
+    ";
+
+
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        die("Erreur SQL: " . mysqli_error($conn));
+    }
+
+    $data = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+
+    mysqli_close($conn);
+    return $data;
+}
 
