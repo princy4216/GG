@@ -2,7 +2,7 @@
 require 'includes/functions.php';
 
 
-$limit = 30;
+$limit = 3;
 
 
 if (isset($_GET['page'])) {
