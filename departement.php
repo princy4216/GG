@@ -54,25 +54,25 @@ $total_pages = ceil($total / $limit);
         </tbody>
     </table>
 
-    <!-- Pagination avec numéro de pages -->
+   
     <?php if ($total_pages > 1) { ?>
         <nav>
             <ul class="pagination justify-content-center">
-                <!-- Page précédente -->
+             
                 <?php if ($page > 1) { ?>
                     <li class="page-item">
                         <a class="page-link" href="departement.php?dept_no=<?php echo $dept_no; ?>&page=<?php echo $page - 1; ?>">← Précédent</a>
                     </li>
                 <?php } ?>
 
-                <!-- Lien pour chaque page -->
+               
                 <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
                     <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
                         <a class="page-link" href="departement.php?dept_no=<?php echo $dept_no; ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
                     </li>
                 <?php } ?>
 
-                <!-- Page suivante -->
+            
                 <?php if ($page < $total_pages) { ?>
                     <li class="page-item">
                         <a class="page-link" href="departement.php?dept_no=<?php echo $dept_no; ?>&page=<?php echo $page + 1; ?>">Suivant →</a>
