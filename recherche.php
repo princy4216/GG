@@ -12,7 +12,14 @@ $age_max = '';
 
 $results = [];
 
-// On vérifie si la méthode est GET et qu’au moins un paramètre est présent
+$page = 1;
+$limit = 20;
+
+if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+    $page = $_GET['page'];
+}
+$offset = ($page - 1) * $limit;
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['dept_no'])) {
         $dept_no = $_GET['dept_no'];
@@ -27,11 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $age_max = $_GET['age_max'];
     }
 
-    // On lance la recherche seulement si au moins un filtre est rempli
+   
     if ($dept_no != '' || $nom != '' || $age_min != '' || $age_max != '') {
         $results = search_employees($dept_no, $nom, $age_min, $age_max);
     }
+    $results = search_employees_paginated_limit($dept_no, $nom, $age_min, $age_max, $limit, $offset);
+    $total = count_total_search_limit($dept_no, $nom, $age_min, $age_max);
+    $total_pages = ceil($total / $limit);
+
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -96,6 +108,34 @@ if (!empty($results)) {
     }
 }
 ?>
+<?php if (!empty($results)) { ?>
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            <?php if ($page > 1) { ?>
+                <li class="page-item">
+                    <a class="page-link"
+                       href="?dept_no=<?php echo $dept_no; ?>&nom=<?php echo $nom; ?>&age_min=<?php echo $age_min; ?>&age_max=<?php echo $age_max; ?>&page=<?php echo $page - 1; ?>">
+                        ← Précédent
+                    </a>
+                </li>
+            <?php } ?>
+
+            <li class="page-item disabled">
+                <span class="page-link">Page <?php echo $page; ?> / <?php echo $total_pages; ?></span>
+            </li>
+
+            <?php if ($page < $total_pages) { ?>
+                <li class="page-item">
+                    <a class="page-link"
+                       href="?dept_no=<?php echo $dept_no; ?>&nom=<?php echo $nom; ?>&age_min=<?php echo $age_min; ?>&age_max=<?php echo $age_max; ?>&page=<?php echo $page + 1; ?>">
+                        Suivant →
+                    </a>
+                </li>
+            <?php } ?>
+        </ul>
+    </nav>
+<?php } ?>
+
 
 
 

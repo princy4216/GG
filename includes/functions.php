@@ -213,3 +213,122 @@ function get_departments_total_count() {
     mysqli_close($conn);
     return $row['total'];
 }
+function get_employees_by_department_paginated($dept_no, $limit, $offset) {
+    $conn = connect_db();
+
+    $sql = "
+        SELECT e.emp_no, e.first_name, e.last_name, e.hire_date
+        FROM employees e
+        INNER JOIN dept_emp de ON e.emp_no = de.emp_no
+        WHERE de.dept_no = '" . $dept_no . "' AND de.to_date > NOW()
+        ORDER BY e.last_name, e.first_name
+        LIMIT " . $limit . " OFFSET " . $offset;
+
+    $result = mysqli_query($conn, $sql);
+    $data = array();
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+
+    mysqli_close($conn);
+    return $data;
+}
+
+function get_total_employees_in_department($dept_no) {
+    $conn = connect_db();
+
+    $sql = "
+        SELECT COUNT(*) AS total
+        FROM dept_emp
+        WHERE dept_no = '" . $dept_no . "' AND to_date > NOW()";
+
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+
+    mysqli_close($conn);
+    return $row['total'];
+}
+
+
+function search_employees_paginated_limit($dept_no, $nom, $age_min, $age_max, $limit, $offset) {
+    $conn = connect_db();
+
+    if (!is_numeric($age_min)) {
+        $age_min = 0;
+    }
+
+    if (!is_numeric($age_max)) {
+        $age_max = 1000;
+    }
+
+    $conditions = [];
+
+    if ($dept_no != '') {
+        $conditions[] = "de.dept_no = '" . $dept_no . "'";
+    }
+
+    if ($nom != '') {
+        $conditions[] = "e.last_name = '" . $nom . "'";
+    }
+
+    $conditions[] = "TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) BETWEEN $age_min AND $age_max";
+
+    $sql = "SELECT e.emp_no, e.first_name, e.last_name,
+                   TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age
+            FROM employees e
+            JOIN dept_emp de ON e.emp_no = de.emp_no";
+
+    if (!empty($conditions)) {
+        $sql .= " WHERE " . implode(" AND ", $conditions);
+    }
+
+    $sql .= " ORDER BY e.emp_no LIMIT $offset, $limit";
+
+    $result = mysqli_query($conn, $sql);
+    $data = [];
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+
+    mysqli_close($conn);
+    return $data;
+}
+
+function count_total_search_limit($dept_no, $nom, $age_min, $age_max) {
+    $conn = connect_db();
+
+    if (!is_numeric($age_min)) {
+        $age_min = 0;
+    }
+
+    if (!is_numeric($age_max)) {
+        $age_max = 1000;
+    }
+
+    $conditions = [];
+
+    if ($dept_no != '') {
+        $conditions[] = "de.dept_no = '" . $dept_no . "'";
+    }
+
+    if ($nom != '') {
+        $conditions[] = "e.last_name = '" . $nom . "'";
+    }
+
+    $conditions[] = "TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) BETWEEN $age_min AND $age_max";
+
+    $sql = "SELECT COUNT(*) AS total
+            FROM employees e
+            JOIN dept_emp de ON e.emp_no = de.emp_no";
+
+    if (!empty($conditions)) {
+        $sql .= " WHERE " . implode(" AND ", $conditions);
+    }
+
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    mysqli_close($conn);
+    return $row['total'];
+}
