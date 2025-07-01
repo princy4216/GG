@@ -176,3 +176,40 @@ function search_employees($dept_no, $nom, $age_min, $age_max) {
     mysqli_close($conn);
     return $data;
 }
+
+function get_departments_paginated($limit, $offset) {
+    $conn = connect_db();
+
+    $sql = "
+        SELECT d.dept_no, d.dept_name, e.first_name, e.last_name
+        FROM departments d
+        LEFT JOIN dept_manager dm ON d.dept_no = dm.dept_no AND dm.to_date > NOW()
+        LEFT JOIN employees e ON dm.emp_no = e.emp_no
+        ORDER BY d.dept_name
+        LIMIT $limit OFFSET $offset
+    ";
+
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        die("Erreur SQL: " . mysqli_error($conn));
+    }
+
+    $data = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+
+    mysqli_close($conn);
+    return $data;
+}
+
+function get_departments_total_count() {
+    $conn = connect_db();
+
+    $sql = "SELECT COUNT(*) AS total FROM departments";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+
+    mysqli_close($conn);
+    return $row['total'];
+}
