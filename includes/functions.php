@@ -27,6 +27,25 @@ function get_departments_with_managers() {
     mysqli_close($conn);
     return $data;
 }
+function get_longest_title($emp_no) {
+    $conn = connect_db();
+
+    $sql = "
+        SELECT title
+        FROM titles
+        WHERE emp_no = $emp_no
+        ORDER BY DATEDIFF(to_date, from_date) DESC
+        LIMIT 1
+    ";
+
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+
+    mysqli_close($conn);
+
+    return $row ? $row['title'] : null;
+}
+
 
 //  Liste des employés d’un département
 function get_employees_by_department($dept_no) {
