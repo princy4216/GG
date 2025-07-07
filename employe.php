@@ -31,6 +31,8 @@ if (!$emp) {
         <div>
             <a href="index.php" class="btn btn-outline-secondary">← Retour</a>
             <a href="historique.php?emp_no=<?php echo $emp['emp_no']; ?>" class="btn btn-primary">Historique ↗</a>
+            <a href="changer_departement.php?emp_no=<?php echo $emp['emp_no']; ?>" class="btn btn-warning">Changer de département 🔁</a>
+
         </div>
     </div>
     

@@ -352,3 +352,39 @@ function count_total_search_limit($dept_no, $nom, $age_min, $age_max) {
     return $row['total'];
 }
 
+
+function get_current_department($emp_no) {
+    $conn = connect_db();
+
+    $sql = "
+        SELECT d.dept_no, d.dept_name, de.from_date
+        FROM dept_emp de
+        JOIN departments d ON de.dept_no = d.dept_no
+        WHERE de.emp_no = $emp_no AND de.to_date = '9999-01-01'
+        LIMIT 1
+    ";
+
+    $res = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($res);
+    mysqli_close($conn);
+    return $row;
+}
+
+function change_department($emp_no, $new_dept, $new_date) {
+    $conn = connect_db();
+
+    $close_sql = "
+        UPDATE dept_emp 
+        SET to_date = '$new_date' 
+        WHERE emp_no = $emp_no AND to_date = '9999-01-01'
+    ";
+    mysqli_query($conn, $close_sql);
+
+      $insert_sql = "
+        INSERT INTO dept_emp (emp_no, dept_no, from_date, to_date)
+        VALUES ($emp_no, '$new_dept', '$new_date', '9999-01-01')
+    ";
+    mysqli_query($conn, $insert_sql);
+
+    mysqli_close($conn);
+}
