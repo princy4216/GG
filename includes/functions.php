@@ -202,9 +202,6 @@ function get_departments_paginated($limit, $offset) {
 }
 
 
-
-
-
 function get_departments_total_count() {
     $conn = connect_db();
 

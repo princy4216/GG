@@ -33,6 +33,8 @@ $total_pages = ceil($total_departments / $limit);
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Départements & Managers</h1>
         <a href="recherche.php" class="btn btn-success">🔍 Rechercher un employé</a>
+     
+
     </div>
 
     <table class="table table-bordered table-hover align-middle">

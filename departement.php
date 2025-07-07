@@ -33,6 +33,9 @@ $total_pages = ceil($total / $limit);
 <div class="container">
     <h1 class="mb-4">Liste des employés du département</h1>
     <a href="index.php" class="btn btn-secondary mb-3">← Retour</a>
+   
+
+    
 
     <table class="table table-striped table-bordered">
         <thead>
