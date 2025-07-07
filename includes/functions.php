@@ -215,6 +215,7 @@ function get_departments_total_count() {
     mysqli_close($conn);
     return $row['total'];
 }
+<<<<<<< HEAD
 function get_employees_by_department_paginated($dept_no, $limit, $offset) {
     $conn = connect_db();
 
@@ -290,12 +291,58 @@ function search_employees_paginated_limit($dept_no, $nom, $age_min, $age_max, $l
     $result = mysqli_query($conn, $sql);
     $data = [];
 
+=======
+
+// ajout collone nbr sur lst départ
+function create_employee_count_view() {
+    $conn = connect_db();
+    
+    $sql = "CREATE OR REPLACE VIEW department_employee_count AS
+            SELECT d.dept_no, d.dept_name, COUNT(de.emp_no) AS employee_count
+            FROM departments d
+            LEFT JOIN dept_emp de ON d.dept_no = de.dept_no AND de.to_date > NOW()
+            GROUP BY d.dept_no, d.dept_name";
+    
+    mysqli_query($conn, $sql);
+    mysqli_close($conn);
+}
+
+// fonction aff nbr employés et salaire par employe
+
+function get_job_stats() {
+    $conn = connect_db();
+
+    $sql = "
+        SELECT 
+            t.title,
+            COUNT(DISTINCT e.emp_no) AS total_employees,
+            SUM(CASE WHEN e.gender = 'M' THEN 1 ELSE 0 END) AS male_count,
+            SUM(CASE WHEN e.gender = 'F' THEN 1 ELSE 0 END) AS female_count,
+            AVG(s.salary) AS avg_salary
+        FROM 
+            titles t
+        JOIN 
+            employees e ON t.emp_no = e.emp_no
+        JOIN 
+            salaries s ON t.emp_no = s.emp_no
+        WHERE 
+            t.to_date > NOW() AND s.to_date > NOW()
+        GROUP BY 
+            t.title
+        ORDER BY 
+            t.title
+    ";
+
+    $result = mysqli_query($conn, $sql);
+    $data = [];
+>>>>>>> 750ff6b (gg)
     while ($row = mysqli_fetch_assoc($result)) {
         $data[] = $row;
     }
 
     mysqli_close($conn);
     return $data;
+<<<<<<< HEAD
 }
 
 function count_total_search_limit($dept_no, $nom, $age_min, $age_max) {
@@ -335,3 +382,6 @@ function count_total_search_limit($dept_no, $nom, $age_min, $age_max) {
     return $row['total'];
 }
 
+=======
+}
+>>>>>>> 750ff6b (gg)

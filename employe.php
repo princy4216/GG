@@ -8,6 +8,7 @@ if (!isset($_GET['emp_no'])) {
 
 $emp_no = $_GET['emp_no'];
 $emp = get_employee_details($emp_no);
+$longest_title = get_longest_title($emp_no); 
 
 if (!$emp) {
     echo "Employé introuvable.";
@@ -20,8 +21,6 @@ if (!$emp) {
 <head>
     <title>Fiche Employé</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-   
-
     <link href="style.css" rel="stylesheet">
 </head>
 <body class="bg-light p-4">
@@ -46,6 +45,9 @@ if (!$emp) {
                 <tr><th>Genre</th><td><?php echo $emp['gender']; ?></td></tr>
                 <tr><th>Date de naissance</th><td><?php echo $emp['birth_date']; ?></td></tr>
                 <tr><th>Date d'embauche</th><td><?php echo $emp['hire_date']; ?></td></tr>
+                <?php if ($longest_title) { ?>
+                    <tr><th>Emploi le plus long</th><td><?php echo $longest_title; ?></td></tr>
+                <?php } ?>
             </table>
         </div>
     </div>
