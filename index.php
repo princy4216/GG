@@ -1,9 +1,7 @@
 <?php
 require 'includes/functions.php';
 
-
 $limit = 3;
-
 
 if (isset($_GET['page'])) {
     $page = (int) $_GET['page'];
@@ -18,6 +16,7 @@ $offset = ($page - 1) * $limit;
 
 $departments = get_departments_paginated($limit, $offset);
 $total_departments = get_departments_total_count();
+
 $total_pages = ceil($total_departments / $limit);
 ?>
 
@@ -40,6 +39,7 @@ $total_pages = ceil($total_departments / $limit);
             <tr>
                 <th>Département</th>
                 <th>Manager</th>
+                <th>Nombre d'employés</th>
             </tr>
         </thead>
         <tbody>
@@ -59,12 +59,12 @@ $total_pages = ceil($total_departments / $limit);
                         }
                         ?>
                     </td>
+                    <td><?php echo $dept['nb_employes']; ?></td>
                 </tr>
             <?php } ?>
         </tbody>
     </table>
 
-    <!-- Pagination -->
     <nav>
         <ul class="pagination justify-content-center">
             <?php if ($page > 1) { ?>
