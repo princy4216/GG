@@ -3,7 +3,8 @@ require 'includes/functions.php';
 
 $limit = 3;
 
-if (isset($_GET['page'])) {
+if (isset($_GET['page'])) 
+{
     $page = (int) $_GET['page'];
     if ($page < 1) {
         $page = 1;

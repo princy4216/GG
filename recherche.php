@@ -127,6 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             </ul>
         </nav>
     <?php } else if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($dept_no != '' || $nom != '' || $age_min != '' || $age_max != '')) { ?>
+       
         <div class="alert alert-warning">Aucun résultat trouvé.</div>
     <?php } ?>
 
