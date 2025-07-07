@@ -76,6 +76,7 @@ function get_employees_by_department($dept_no) {
     return $data;
 }
 
+
 function get_employee_details($emp_no) {
     $conn = connect_db();
 
