@@ -21,3 +21,15 @@ index.php, departement.php, employe.php, historique.php
  style.css
  db_connect.php
  
+
+ view :CREATE VIEW v_departements_employes AS
+SELECT 
+    d.dept_no,
+    d.dept_name,
+    COUNT(de.emp_no) AS nb_employes
+FROM 
+    departments d
+LEFT JOIN 
+    dept_emp de ON d.dept_no = de.dept_no AND de.to_date > NOW()
+GROUP BY 
+    d.dept_no;
