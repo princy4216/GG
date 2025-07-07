@@ -1,7 +1,8 @@
 <?php
 require 'includes/functions.php';
 
-if (!isset($_GET['dept_no'])) {
+if (!isset($_GET['dept_no']))
+ {
     echo "Département non spécifié.";
     exit;
 }

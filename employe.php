@@ -34,6 +34,7 @@ if (!$emp) {
             <a href="historique.php?emp_no=<?php echo $emp['emp_no']; ?>" class="btn btn-primary">Historique ↗</a>
         </div>
     </div>
+    
 
     <div class="card shadow-sm">
         <div class="card-body">

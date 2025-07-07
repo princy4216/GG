@@ -32,7 +32,7 @@ $departments_history = get_department_history_by_employee($emp_no); // nouvelle 
 <h1>Historique de l'Employé</h1>
 <h2>Employé : <?php echo $emp['first_name'] . ' ' . $emp['last_name']; ?> (<?php echo $emp['emp_no']; ?>)</h2>
 
-<!-- Historique des Salaires -->
+
 <div class="salaire-container">
     <h2>Historique des Salaires</h2>
     <table class="salaire-table">
