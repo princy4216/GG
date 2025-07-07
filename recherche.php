@@ -46,6 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 <head>
     <title>Recherche d'employés</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
      <a href="index.php" class="btn btn-link mt-3">← Retour à la liste des départements</a>
 </head>
 <body class="p-4 bg-light">
@@ -97,7 +99,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         <td><?php echo $e['last_name']; ?></td>
                         <td><?php echo $e['first_name']; ?></td>
                         <td><?php echo $e['age']; ?> ans</td>
-                        <td><a href="employe.php?emp_no=<?php echo $e['emp_no']; ?>" class="btn btn-sm btn-info">Voir</a></td>
+                        <td>
+  <a href="employe.php?emp_no=<?php echo $e['emp_no']; ?>" class="btn btn-sm btn-outline-primary">
+    <i class="bi bi-eye"></i>
+  </a>
+</td>
+
                     </tr>
                 <?php } ?>
             </tbody>
