@@ -15,7 +15,7 @@ if (!$emp) {
 }
 
 $salaries = get_salaries_by_employee($emp_no);
-$departments_history = get_department_history_by_employee($emp_no); // nouvelle fonction à inclure
+$departments_history = get_department_history_by_employee($emp_no);
 ?>
 
 <!DOCTYPE html>
