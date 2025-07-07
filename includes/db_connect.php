@@ -10,5 +10,6 @@ function connect_db() {
         die("Erreur connexion DB : " . mysqli_connect_error());
     }
     mysqli_set_charset($conn, "utf8");
+    
     return $conn;
 }
